@@ -82,6 +82,6 @@ public class Person {
 				"State: " + state + "\n" + 
 				"Zip: " + zip + "\n" + 
 				"Phone: " + phone + "\n" + 
-				"Email: " + email;
+				"Email: " + email + "\n";
 	}
 }
