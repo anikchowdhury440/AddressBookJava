@@ -9,7 +9,8 @@ public class AddressBookMainClass {
 		{
 			System.out.println("1.Add Person to Address Book");
 			System.out.println("2.Display Person to Address Book");
-			System.out.println("3.Exit program");
+			System.out.println("3.Edit Person in Address Book");
+			System.out.println("4.Exit program");
 			System.out.println("Enter Your Choice: ");
 			int option = sc.nextInt();
 			switch(option)
@@ -21,6 +22,9 @@ public class AddressBookMainClass {
 					addressbook.displayPerson();
 					break;
 				case 3:
+					addressbook.editPerson();
+					break;
+				case 4:
 					isTerminate = true;
 					break;
 				default:
