@@ -122,5 +122,27 @@ public class AddressBook {
 		}
 		
 	}
+	
+	public void deletePerson() {
+		System.out.println("Enter First Name do you want to delete: ");
+		String enteredFirstName = scanner.nextLine();
+		String fname = person.getfName();
+		if(fname.equalsIgnoreCase(enteredFirstName)) 
+		{
+			person.setfName(null);
+			person.setlName(null);
+			person.setAddress(null);
+			person.setCity(null);
+			person.setEmail(null);
+			person.setPhone(null);
+			person.setState(null);
+			person.setZip(null);
+			System.out.println("Contact Deleted");
+		}
+		else
+		{
+			System.out.println("Contact doesn't exist");
+		}
+	}
 
 }
