@@ -321,6 +321,8 @@ public class AddressBook {
 		String findCity = scanner.nextLine().toUpperCase();
 		try {
 			List<Person> personCity = personByCity.get(findCity);
+			int count = personCity.size();
+			System.out.println(count + "Contact Found");
 			Iterator iterator = personCity.iterator();
 			while(iterator.hasNext()) {
 				System.out.println(iterator.next());
@@ -336,6 +338,8 @@ public class AddressBook {
 		String findState = scanner.nextLine().toUpperCase();
 		try {
 			List<Person> personState = personByState.get(findState);
+			int count = personState.size();
+			System.out.println(count + "Contact Found");
 			Iterator iterator = personState.iterator();
 			while(iterator.hasNext()) {
 				System.out.println(iterator.next());
