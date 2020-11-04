@@ -73,8 +73,18 @@ public class AddressBook {
 		
 		Person person = new Person();
 		
-		System.out.println("Enter First Name");
-        String fName = scanner.nextLine();
+		String fName;
+		while(true) {
+			System.out.println("Enter First Name");
+	        fName = scanner.nextLine();
+	        if(checkDuplicate(fName)) {
+	        	System.out.println("Person already exist! Please Enter different name");
+	        }
+	        else {
+	        	break;
+	        }
+		}
+		
         System.out.println("Enter Last Name");
         String lName = scanner.nextLine();
         System.out.println("Enter Address");
@@ -157,14 +167,12 @@ public class AddressBook {
 				contactFound = 1;
 				do {
 					choice = 0;
-					System.out.println("1: Edit First name \n" +
-										"2: Edit Last Name \n" +
-										"3: Edit Address \n" +
-										"4: Edit City \n" +
-										"5: Edit State \n" +
-										"6: Edit Zip \n" +
-										"7: Edit PhoneNumber \n" +
-			                	   		"8. Edit Email");
+					System.out.println("1: Edit Address \n" +
+										"2: Edit City \n" +
+										"3: Edit State \n" +
+										"4: Edit Zip \n" +
+										"5: Edit PhoneNumber \n" +
+			                	   		"6. Edit Email");
 					System.out.println("Enter Your choice: ");
 	 
 					int selectedOption = scanner.nextInt();
@@ -172,36 +180,26 @@ public class AddressBook {
 	 
 					switch (selectedOption) {
 						case 1:
-							System.out.println("Enter First Name ");
-							String fName = scanner.nextLine();
-							personList.get(index).setfName(fName);
-							break;
-						case 2:
-							System.out.println("Enter Last Name");
-							String lName = scanner.nextLine();
-							personList.get(index).setlName(lName);
-							break;
-						case 3:
 							System.out.println("Enter Address");
 							String address = scanner.nextLine();
 							personList.get(index).setAddress(address);
 							break;
-						case 4:
+						case 2:
 							System.out.println("Enter City");
 							String city = scanner.nextLine();
 							personList.get(index).setCity(city);
 							break;
-						case 5:
+						case 3:
 							System.out.println("Enter State");
 							String state = scanner.nextLine();
 							personList.get(index).setState(state);
 							break;
-						case 6:
+						case 4:
 							System.out.println("Enter Zip Code");
 							String zip=scanner.nextLine();
 							personList.get(index).setZip(zip);
 							break;
-						case 7:
+						case 5:
 							System.out.println("Enter Phone Number");
 							String phone = scanner.nextLine();
 							personList.get(index).setPhone(phone);
@@ -261,6 +259,23 @@ public class AddressBook {
 		if (contactFound == 0)
 		{
 			System.out.println("Contact not found");
+		}
+	}
+	
+	public boolean checkDuplicate(String fName) {
+		int duplicateFound = 0;
+		List<Person> personList = addressBook.get(addressKey);
+		for (int index = 0; index < personList.size(); index++) {
+			if(personList.get(index).getfName().equalsIgnoreCase(fName)) {
+				duplicateFound = 1;
+				break;
+			}
+		}
+		if (duplicateFound == 1) {
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 
