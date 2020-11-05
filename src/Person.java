@@ -84,4 +84,13 @@ public class Person {
 				"Phone: " + phone + "\n" + 
 				"Email: " + email + "\n";
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Person) {
+			Person person = (Person) obj;
+			return fName.equals(person.fName);
+		}
+		return false;	
+	}
 }
