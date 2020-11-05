@@ -1,15 +1,17 @@
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class AddressBook {
 	
 	Map<String, List<Person>> addressBook = new HashMap<String, List<Person>>();
+	Map<String, List<Person>> personByCity = new HashMap<String, List<Person>>();
+	Map<String, List<Person>> personByState = new HashMap<String, List<Person>>();
 	String[] addressList = new String[20];
 	int countAddressbook = 0;
 	String addressKey;
@@ -113,6 +115,9 @@ public class AddressBook {
         List<Person> personList = addressBook.get(addressKey);
         personList.add(person);
         addressBook.put(addressKey,personList);
+        
+		maintainDictionaryCity();
+		maintainDictionaryState();
         
         System.out.println("Contact Added");
 
@@ -227,6 +232,10 @@ public class AddressBook {
 		if(contactFound == 0) {
 			System.out.println("Contact doesn't exist");
 		}
+		else {
+			maintainDictionaryCity();
+			maintainDictionaryState();
+		}
 		
 	}
 	
@@ -257,6 +266,10 @@ public class AddressBook {
 		
 		if (contactFound == 0) {
 			System.out.println("Contact not found");
+		}
+		else {
+			maintainDictionaryCity();
+			maintainDictionaryState();
 		}
 		
 	}
@@ -298,44 +311,73 @@ public class AddressBook {
 	public void searchByCity() {
 		System.out.println("Enter City");
 		String findCity = scanner.nextLine();
-		int contactFound = 0;
-		for(int address = 0; address < countAddressbook; address++) {
-			addressKey = addressList[address];
-			List<Person> personList = addressBook.get(addressKey);
-			List<Person> personByCity = personList.stream()
-										.filter(person -> person.getCity().equalsIgnoreCase(findCity))
-										.collect(Collectors.toList());
-			personByCity.forEach(index -> {
-				System.out.println(index);
+		try {
+			List<Person> personCity = personByCity.get(findCity);
+			personCity.forEach(person -> {
+				System.out.println(person);
 			});
-			if(personByCity.size() != 0) {
-				contactFound = 1;
-			}
-		}
-		if(contactFound == 0) {
-			System.out.println("Contact Not Found");
+		} 
+		catch (NullPointerException e) {
+			System.out.println("No Contact Found");
 		}
 	}
 	
 	public void searchByState() {
 		System.out.println("Enter State");
 		String findState = scanner.nextLine();
-		int contactFound = 0;
+		try {
+			List<Person> personState = personByState.get(findState);
+			personState.forEach(person -> {
+				System.out.println(person);
+			});
+		} 
+		catch (NullPointerException e) {
+			System.out.println("No Contact Found");
+		}
+	}
+	
+	public void maintainDictionaryCity() {
+		personByCity.clear();
 		for(int address = 0; address < countAddressbook; address++) {
 			addressKey = addressList[address];
 			List<Person> personList = addressBook.get(addressKey);
-			List<Person> personByState = personList.stream()
-										.filter(person -> person.getState().equalsIgnoreCase(findState))
-										.collect(Collectors.toList());
-			personByState.forEach(index -> {
-				System.out.println(index);
+			personList.forEach(person -> {
+				String city = person.getCity();
+				try {
+					List<Person> personCity = personByCity.get(city);
+					personCity.add(person);
+					personByCity.put(city,personCity);
+				} 
+				catch (NullPointerException e) {
+					personByCity.put(city,new LinkedList<Person>());
+					List<Person> personCity = personByCity.get(city);
+			        personCity.add(person);
+			        personByCity.put(city,personCity);
+				}
 			});
-			if(personByState.size() != 0) {
-				contactFound = 1;
-			}
-		}
-		if(contactFound == 0) {
-			System.out.println("Contact Not Found");
 		}
 	}
+	
+	public void maintainDictionaryState() {
+		personByState.clear();
+		for(int address = 0; address < countAddressbook; address++) {
+			addressKey = addressList[address];
+			List<Person> personList = addressBook.get(addressKey);
+			personList.forEach(person -> {
+				String state = person.getState();
+				try {
+					List<Person> personState = personByState.get(state);
+					personState.add(person);
+					personByState.put(state,personState);
+				} 
+				catch (NullPointerException e) {
+					personByState.put(state,new LinkedList<Person>());
+					List<Person> personState = personByState.get(state);
+			        personState.add(person);
+			        personByState.put(state,personState);
+				}
+			});
+		}
+	}
+	
 }
