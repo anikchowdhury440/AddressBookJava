@@ -13,7 +13,8 @@ public class AddressBookMainClass {
 			System.out.println("4.Edit Person in Address Book");
 			System.out.println("5.Delete Person in Address Book");
 			System.out.println("6.Search Person");
-			System.out.println("7.Exit program");
+			System.out.println("7.Sort Person");
+			System.out.println("8.Exit program");
 			System.out.println("Enter Your Choice: ");
 			int option = sc.nextInt();
 			switch(option)
@@ -37,6 +38,9 @@ public class AddressBookMainClass {
 					addressbook.searchPerson();
 					break;
 				case 7:
+					addressbook.sortPerson();
+					break;
+				case 8:
 					isTerminate = true;
 					break;
 				default:

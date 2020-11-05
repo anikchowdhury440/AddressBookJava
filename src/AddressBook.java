@@ -1,4 +1,5 @@
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -382,6 +383,44 @@ public class AddressBook {
 				}
 			});
 		}
+	}
+	
+	public void sortPerson() {
+		if(countAddressbook == 0) {
+			System.out.println("There is no Address Book present. Please Create one AddressBook");
+			return;
+		}
+		boolean isTerminate = false;
+		while(!isTerminate) {
+			System.out.println("1.Sort By Name");
+			System.out.println("2.Back");
+			System.out.println("Enter Your Choice");
+			int choice = scanner.nextInt();
+			scanner.nextLine();
+			switch (choice) {
+				case 1:
+					sortByName();
+					break;
+				case 2:
+					isTerminate = true;
+					break;
+				default:
+					System.out.println("Please Enter Correct Option...");
+			}
+		}
+	}
+	
+	public void sortByName() {
+		
+		getAddressBook();
+		selectAddressBook();
+		
+		List<Person> personList = addressBook.get(addressKey);
+		
+		personList = personList.stream().sorted((person1, person2) -> person1.getfName().compareTo(person2.getfName())).collect(Collectors.toList());
+		addressBook.put(addressKey, personList);
+		
+		System.out.println(addressKey + " AddressBook Sorted By Name Successfully");
 	}
 	
 }
