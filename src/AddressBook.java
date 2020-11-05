@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class AddressBook {
 	
@@ -264,4 +266,76 @@ public class AddressBook {
 		return personList.stream().anyMatch(person -> fName.equals(person.getfName()));
 	}
 	
+	public void searchPerson() {
+		if(countAddressbook == 0) {
+			System.out.println("There is no Address Book present. Please Create one AddressBook");
+			return;
+		}
+		boolean isTerminate = false;
+		while(!isTerminate) {
+			System.out.println("1.Search By City");
+			System.out.println("2.Search By State");
+			System.out.println("3.Back");
+			System.out.println("Enter Your Choice");
+			int choice = scanner.nextInt();
+			scanner.nextLine();
+			switch (choice) {
+				case 1:
+					searchByCity();
+					break;
+				case 2:
+					searchByState();
+					break;
+				case 3:
+					isTerminate = true;
+					break;
+				default:
+					System.out.println("Please Enter Correct Option...");
+			}
+		}
+	}
+	
+	public void searchByCity() {
+		System.out.println("Enter City");
+		String findCity = scanner.nextLine();
+		int contactFound = 0;
+		for(int address = 0; address < countAddressbook; address++) {
+			addressKey = addressList[address];
+			List<Person> personList = addressBook.get(addressKey);
+			List<Person> personByCity = personList.stream()
+										.filter(person -> person.getCity().equalsIgnoreCase(findCity))
+										.collect(Collectors.toList());
+			personByCity.forEach(index -> {
+				System.out.println(index);
+			});
+			if(personByCity.size() != 0) {
+				contactFound = 1;
+			}
+		}
+		if(contactFound == 0) {
+			System.out.println("Contact Not Found");
+		}
+	}
+	
+	public void searchByState() {
+		System.out.println("Enter State");
+		String findState = scanner.nextLine();
+		int contactFound = 0;
+		for(int address = 0; address < countAddressbook; address++) {
+			addressKey = addressList[address];
+			List<Person> personList = addressBook.get(addressKey);
+			List<Person> personByState = personList.stream()
+										.filter(person -> person.getState().equalsIgnoreCase(findState))
+										.collect(Collectors.toList());
+			personByState.forEach(index -> {
+				System.out.println(index);
+			});
+			if(personByState.size() != 0) {
+				contactFound = 1;
+			}
+		}
+		if(contactFound == 0) {
+			System.out.println("Contact Not Found");
+		}
+	}
 }

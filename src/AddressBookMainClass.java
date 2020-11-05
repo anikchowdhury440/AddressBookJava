@@ -12,6 +12,7 @@ public class AddressBookMainClass {
 			System.out.println("3.Display Person in Address Book");
 			System.out.println("4.Edit Person in Address Book");
 			System.out.println("5.Delete Person in Address Book");
+			System.out.println("6.Search Person");
 			System.out.println("7.Exit program");
 			System.out.println("Enter Your Choice: ");
 			int option = sc.nextInt();
@@ -33,6 +34,9 @@ public class AddressBookMainClass {
 					addressbook.deletePerson();
 					break;
 				case 6:
+					addressbook.searchPerson();
+					break;
+				case 7:
 					isTerminate = true;
 					break;
 				default:
