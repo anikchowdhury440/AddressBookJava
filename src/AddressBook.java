@@ -417,7 +417,9 @@ public class AddressBook {
 		
 		List<Person> personList = addressBook.get(addressKey);
 		
-		personList = personList.stream().sorted((person1, person2) -> person1.getfName().compareTo(person2.getfName())).collect(Collectors.toList());
+		personList = personList.stream()
+					.sorted((person1, person2) -> person1.getfName().compareTo(person2.getfName()))
+					.collect(Collectors.toList());
 		addressBook.put(addressKey, personList);
 		
 		System.out.println(addressKey + " AddressBook Sorted By Name Successfully");
