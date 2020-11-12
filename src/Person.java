@@ -1,6 +1,7 @@
-import java.util.Comparator;
+import java.io.Serializable;
 
-public class Person {
+public class Person implements Serializable{
+	private static final long serialVersionUID = 7485550907486938782L;
 	private String fName;
 	private String lName;
 	private String address;

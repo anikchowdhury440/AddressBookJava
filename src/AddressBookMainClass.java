@@ -1,7 +1,8 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class AddressBookMainClass {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		AddressBook addressbook = new AddressBook();
 		Scanner sc = new Scanner(System.in);
 		boolean isTerminate = false;

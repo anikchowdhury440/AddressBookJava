@@ -1,5 +1,12 @@
-import java.util.Collections;
-import java.util.Comparator;
+
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,11 +25,45 @@ public class AddressBook {
 	String addressKey;
 	Scanner scanner = new Scanner(System.in);
 	
-	public void createAddressBook() {	
+	public void writeAddressBookInFile() throws IOException {
+		try {
+			Path path = Paths.get("addressbook.txt");
+			FileOutputStream fileOutputStream = new FileOutputStream(path.toFile());
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+			objectOutputStream.writeInt(countAddressbook);
+			objectOutputStream.writeObject(addressList);
+			objectOutputStream.writeObject(addressBook);
+			objectOutputStream.flush();
+			objectOutputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void readAddressBookInFile() throws IOException {
+		try {
+			Path path = Paths.get("addressbook.txt");
+			FileInputStream fileInputStream = new FileInputStream(path.toFile());
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			countAddressbook = objectInputStream.readInt();
+			addressList = (String[]) objectInputStream.readObject();
+			addressBook = (Map<String, List<Person>>) objectInputStream.readObject();
+			objectInputStream.close();
+			fileInputStream.close();
+		}
+		catch (EOFException e) {}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createAddressBook() throws IOException {
+		readAddressBookInFile();
 		System.out.println("Enter the name of address book do you want to create: ");
 		addressList[countAddressbook] = scanner.nextLine();
 		addressBook.put(addressList[countAddressbook], new LinkedList<Person>());
 		countAddressbook++;
+		writeAddressBookInFile();
 		System.out.println("Address Book Created");	
 	}
 	
@@ -65,8 +106,10 @@ public class AddressBook {
 		}
 	}
 	
-	public void addPerson()
+	public void addPerson() throws IOException
 	{
+		readAddressBookInFile();
+		
 		if(countAddressbook == 0) {
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
 			return;
@@ -119,12 +162,16 @@ public class AddressBook {
         
 		maintainDictionaryCity();
 		maintainDictionaryState();
-        
+		
+		writeAddressBookInFile();
+		
         System.out.println("Contact Added");
 
 	}
 	
-	public void displayPerson() {
+	public void displayPerson() throws IOException {
+		readAddressBookInFile();
+		
 		if(countAddressbook == 0)
 		{
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
@@ -149,7 +196,9 @@ public class AddressBook {
 	}
 	
 	
-	public void editPerson() {
+	public void editPerson() throws IOException {
+		readAddressBookInFile();
+		
 		if(countAddressbook == 0)
 		{
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
@@ -238,9 +287,12 @@ public class AddressBook {
 			maintainDictionaryState();
 		}
 		
+		writeAddressBookInFile();
+		
 	}
 	
-	public void deletePerson() {
+	public void deletePerson() throws IOException {
+		readAddressBookInFile();
 		if(countAddressbook == 0) {
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
 			return;
@@ -273,6 +325,8 @@ public class AddressBook {
 			maintainDictionaryState();
 		}
 		
+		writeAddressBookInFile();
+		
 	}
 	
 	public boolean checkDuplicate(String fName) {
@@ -280,7 +334,9 @@ public class AddressBook {
 		return personList.stream().anyMatch(person -> fName.equals(person.getfName()));
 	}
 	
-	public void searchPerson() {
+	public void searchPerson() throws IOException {
+		readAddressBookInFile();
+		
 		if(countAddressbook == 0) {
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
 			return;
@@ -310,12 +366,13 @@ public class AddressBook {
 	}
 	
 	public void searchByCity() {
+		maintainDictionaryCity();
 		System.out.println("Enter City");
 		String findCity = scanner.nextLine().toUpperCase();
 		try {
 			List<Person> personCity = personByCity.get(findCity);
 			long countByCity = personCity.stream().filter(person -> person.getCity().equalsIgnoreCase(findCity)).count();
-			System.out.println(countByCity + "Contact Found. \n");
+			System.out.println(countByCity + " Contact Found. \n");
 			personCity.forEach(person -> {
 				System.out.println(person);
 			});
@@ -326,6 +383,7 @@ public class AddressBook {
 	}
 	
 	public void searchByState() {
+		maintainDictionaryState();
 		System.out.println("Enter State");
 		String findState = scanner.nextLine().toUpperCase();
 		try {
@@ -385,7 +443,9 @@ public class AddressBook {
 		}
 	}
 	
-	public void sortPerson() {
+	public void sortPerson() throws IOException {
+		readAddressBookInFile();
+		
 		if(countAddressbook == 0) {
 			System.out.println("There is no Address Book present. Please Create one AddressBook");
 			return;
@@ -422,7 +482,7 @@ public class AddressBook {
 		}
 	}
 	
-	public void sortByName() {
+	public void sortByName() throws IOException {
 		
 		getAddressBook();
 		selectAddressBook();
@@ -434,9 +494,12 @@ public class AddressBook {
 		addressBook.put(addressKey, personList);
 		
 		System.out.println(addressKey + " AddressBook Sorted By Name Successfully. \n");
+		
+		writeAddressBookInFile();
 	}
 	
-	public void sortByCity() {
+	public void sortByCity() throws IOException {
+		readAddressBookInFile();
 		
 		getAddressBook();
 		selectAddressBook();
@@ -448,10 +511,11 @@ public class AddressBook {
 					.collect(Collectors.toList());
 		addressBook.put(addressKey, personList);
 		
+		writeAddressBookInFile();
 		System.out.println(addressKey + " AddressBook Sorted By City Successfully. \n");
 	}
 	
-	public void sortByState() {
+	public void sortByState() throws IOException {
 		
 		getAddressBook();
 		selectAddressBook();
@@ -463,11 +527,13 @@ public class AddressBook {
 					.collect(Collectors.toList());
 		addressBook.put(addressKey, personList);
 		
+		writeAddressBookInFile();
+		
 		System.out.println(addressKey + " AddressBook Sorted By State Successfully. \n");
 	}
 	
-	public void sortByZip() {
-		
+	public void sortByZip() throws IOException {
+		readAddressBookInFile();
 		getAddressBook();
 		selectAddressBook();
 		
@@ -478,6 +544,9 @@ public class AddressBook {
 					.collect(Collectors.toList());
 		addressBook.put(addressKey, personList);
 		
+		writeAddressBookInFile();
+		
 		System.out.println(addressKey + " AddressBook Sorted By Zip Successfully. \n");
 	}
+	
 }
