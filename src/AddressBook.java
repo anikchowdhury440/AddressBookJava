@@ -30,8 +30,6 @@ public class AddressBook {
 			Path path = Paths.get("addressbook.txt");
 			FileOutputStream fileOutputStream = new FileOutputStream(path.toFile());
 			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeInt(countAddressbook);
-			objectOutputStream.writeObject(addressList);
 			objectOutputStream.writeObject(addressBook);
 			objectOutputStream.flush();
 			objectOutputStream.close();
@@ -45,9 +43,16 @@ public class AddressBook {
 			Path path = Paths.get("addressbook.txt");
 			FileInputStream fileInputStream = new FileInputStream(path.toFile());
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-			countAddressbook = objectInputStream.readInt();
-			addressList = (String[]) objectInputStream.readObject();
 			addressBook = (Map<String, List<Person>>) objectInputStream.readObject();
+			countAddressbook = 0;
+			for(int i = 0; i < addressBook.size(); i++) {
+				countAddressbook++;
+			}
+			int i = 0;
+			for(Map.Entry k : addressBook.entrySet()) {
+				addressList[i] = (String) k.getKey();
+				i++;
+			}
 			objectInputStream.close();
 			fileInputStream.close();
 		}
